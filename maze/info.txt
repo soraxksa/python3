@@ -1,0 +1,8 @@
+green cell = the starting point
+pink cell = the end point
+
+press s for start
+press r for restart
+
+
+left click and right click for creating the maze
