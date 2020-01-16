@@ -2,8 +2,7 @@
 import pygame
 from pygame.locals import *
 import time
-#Trying Out push
-#Hello
+
 class board:
 
     window_size = 720
