@@ -2,14 +2,14 @@
 import pygame
 from pygame.locals import *
 import time
+from random import randint
 
 class board:
 
     window_size = 720
-    WHITE = (255, 255, 255)
-    BLACK = (0, 0, 0)
+    color1 = (randint(0, 255), randint(0, 255), randint(0, 255))
+    color2 = (randint(0, 255), randint(0, 255), randint(0, 255))
     
-
     def __init__(self, numRows, numCols):
         pygame.init()
         self.window = pygame.display.set_mode((self.window_size, self.window_size))
@@ -18,7 +18,7 @@ class board:
         self.cols = numCols
         self.board = [[False for _ in range(numCols)] for __ in range(numRows)]
         self.queens = []
-        self.queen_image = pygame.transform.scale(pygame.image.load('queen.png').convert_alpha(), (self.cell_size, self.cell_size)).convert_alpha()
+        self.queen_image = pygame.transform.scale(pygame.image.load('queen.png').convert_alpha() , (self.cell_size, self.cell_size))
 
     def size(self):
         return self.rows
@@ -28,7 +28,7 @@ class board:
 
     def setQueen(self, row, col):
         if row < 0 or row >= self.rows or col < 0 or col >= self.cols:
-            raise NameError('Error:row or col')
+            raise ValueError('row or column out of bounds.')
         self.board[row][col] = True
         self.queens.append(row)
 
@@ -51,8 +51,8 @@ class board:
         top_left = []
         for row, col in zip(range(pos_row-1, -1, -1), range(pos_col-1, -1, -1)):
             top_left.append((row, col))
-        down_left = []
 
+        down_left = []
         for row, col in zip(range(pos_row+1, self.rows), range(pos_col-1, -1, -1)):
             down_left.append((row, col))
         return left + top_left + down_left
@@ -62,8 +62,9 @@ class board:
             for col_index, item in enumerate(row):
                 cell = pygame.Rect((col_index * self.cell_size), (row_index * self.cell_size), self.cell_size, self.cell_size)
                 if item == True:
+                    pygame.draw.rect(self.window, self.getColor(row_index, col_index), cell) 
                     self.window.blit(self.queen_image, ((col_index * self.cell_size), (row_index * self.cell_size)))
-                    #pygame.draw.rect(self.window, (255, 0, 0), cell)
+
                 else:
                     pygame.draw.rect(self.window, self.getColor(row_index, col_index), cell)
         pygame.display.update()
@@ -71,12 +72,12 @@ class board:
     def getColor(self, row, col):
         if row % 2 == 0:
             if col % 2 == 0:
-                return self.BLACK
-            return self.WHITE
+                return self.color2
+            return self.color1
         else:
             if col % 2 == 0:
-                return self.WHITE
-            return self.BLACK
+                return self.color1
+            return self.color2
 
     def __repr__(self):
         board = []
@@ -100,8 +101,8 @@ def solveQueen(board, col):
 
     if board.size() == board.numQueens():
         return True
-    else:
 
+    else:
         for row in range(board.rows):
             if board.is_unguard(row, col):
                 board.setQueen(row, col)
@@ -116,37 +117,37 @@ def solveQueen(board, col):
 def solve_all_queen(board, col):
 
     if board.numQueens() == board.size():
-        board.count += 1
+        board.count += 1 # ?
         return True
     else:
         for row in range(board.rows):
             if board.is_unguard(row, col):
                 board.setQueen(row, col)
-                solveQueen2(board, col+1)
+                solveQueen(board, col+1)
                 board.removeQueen(row, col)
 
 fps = pygame.time.Clock()
-game = board(8, 8)
-solving = True
-running = True
+randomInteger = randint(5, 12)
+game = board(randomInteger, randomInteger)
 game.draw()
-while running:
+while True:
 
     for event in pygame.event.get():
         if event.type == QUIT:
             print('end')
-            pygame.quit()
+            pygame.quit()                      
             quit()
-            running = False
+            break
     keys = pygame.key.get_pressed()
     solveQueen(game, 0)
-    '''
-    if keys[pygame.K_s] and solving:
-        solving = False
-        print('solveing')
-        solveQueen(game, 0)
-        game.draw()
-    '''
     
+
+
+
+
+
+
+
+
 
 
